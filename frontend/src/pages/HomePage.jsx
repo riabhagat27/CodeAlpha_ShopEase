@@ -26,10 +26,10 @@ export default function HomePage() {
   }, []);
 
   const categories = [
-    { name: 'Electronics', icon: '⚡', count: '5 Products', color: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)' },
-    { name: 'Fashion', icon: '👕', count: '3 Products', color: 'linear-gradient(135deg, #ec4899 0%, #be185d 100%)' },
-    { name: 'Home', icon: '🏠', count: '3 Products', color: 'linear-gradient(135deg, #10b981 0%, #047857 100%)' },
-    { name: 'Accessories', icon: '🎒', count: '3 Products', color: 'linear-gradient(135deg, #f59e0b 0%, #b45309 100%)' },
+    { name: 'Electronics', icon: '⚡', count: '5 Products', color: '#111111' },
+    { name: 'Fashion', icon: '👕', count: '3 Products', color: '#111111' },
+    { name: 'Home', icon: '🏠', count: '3 Products', color: '#111111' },
+    { name: 'Accessories', icon: '🎒', count: '3 Products', color: '#111111' },
   ];
 
   return (
@@ -47,7 +47,7 @@ export default function HomePage() {
               <span>Shop Now</span>
               <ArrowRight size={20} />
             </Link>
-            <Link to="/products?category=Electronics" className="btn btn-secondary btn-lg" style={{ color: '#ffffff', backgroundColor: 'rgba(255, 255, 255, 0.1)', borderColor: 'rgba(255, 255, 255, 0.2)' }}>
+            <Link to="/products?category=Electronics" className="btn btn-secondary btn-lg" style={{ color: '#111111', backgroundColor: '#EBE7DF', borderColor: '#E5E0D8' }}>
               Explore Electronics
             </Link>
           </div>
@@ -91,7 +91,7 @@ export default function HomePage() {
       {/* Category Grid Section */}
       <section className="container" style={{ margin: '60px auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.5px' }}>Shop by Category</h2>
+          <h2 style={{ fontSize: '2.4rem', fontFamily: 'var(--font-serif)', fontWeight: 600 }}>Shop by Category</h2>
           <p style={{ color: 'var(--text-muted)', marginTop: '8px' }}>Browse our wide range of popular categories</p>
         </div>
 
@@ -104,29 +104,29 @@ export default function HomePage() {
               style={{
                 padding: '30px 20px',
                 textAlign: 'center',
-                background: '#ffffff',
+                background: 'var(--bg-card)',
                 transition: 'var(--transition)',
                 cursor: 'pointer'
               }}
             >
               <div
                 style={{
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '50%',
+                  width: '56px',
+                  height: '56px',
+                  borderRadius: 'var(--radius-sm)',
                   background: cat.color,
-                  color: '#ffffff',
+                  color: '#F9F8F6',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '1.6rem',
+                  fontSize: '1.5rem',
                   margin: '0 auto 16px'
                 }}
               >
                 {cat.icon}
               </div>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '6px' }}>{cat.name}</h3>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{cat.count}</span>
+              <h3 style={{ fontSize: '1.25rem', fontFamily: 'var(--font-serif)', fontWeight: 600, marginBottom: '6px' }}>{cat.name}</h3>
+              <span style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)' }}>{cat.count}</span>
             </Link>
           ))}
         </div>
@@ -136,7 +136,7 @@ export default function HomePage() {
       <section className="container" style={{ margin: '60px auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
           <div>
-            <h2 style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.5px' }}>Featured Products</h2>
+            <h2 style={{ fontSize: '2.4rem', fontFamily: 'var(--font-serif)', fontWeight: 600 }}>Featured Products</h2>
             <p style={{ color: 'var(--text-muted)', marginTop: '4px' }}>Trending items our customers love</p>
           </div>
           <Link to="/products" className="btn btn-outline">
@@ -164,10 +164,10 @@ export default function HomePage() {
       <section className="container" style={{ margin: '60px auto' }}>
         <div
           style={{
-            background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
-            borderRadius: 'var(--radius-lg)',
+            background: '#111111',
+            borderRadius: 'var(--radius-md)',
             padding: '50px 40px',
-            color: '#ffffff',
+            color: '#F9F8F6',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -176,17 +176,17 @@ export default function HomePage() {
           }}
         >
           <div style={{ maxWidth: '600px' }}>
-            <span style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: '4px 12px', borderRadius: 'var(--radius-full)', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase' }}>
+            <span style={{ backgroundColor: 'rgba(249,248,246,0.15)', padding: '4px 12px', borderRadius: 'var(--radius-sm)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
               Special Deal
             </span>
-            <h2 style={{ fontSize: '2.2rem', fontWeight: 800, marginTop: '14px', marginBottom: '12px' }}>
+            <h2 style={{ fontSize: '2.4rem', fontFamily: 'var(--font-serif)', fontWeight: 600, marginTop: '14px', marginBottom: '12px', color: '#F9F8F6' }}>
               Upgrade Your Everyday Tech & Apparel
             </h2>
-            <p style={{ opacity: 0.9, fontSize: '1rem', lineHeight: 1.6 }}>
+            <p style={{ opacity: 0.85, fontSize: '1rem', lineHeight: 1.6, color: '#EBE7DF' }}>
               Get unbeatable prices on premium wireless headphones, smart watches, backpacks, and stylish daily wear.
             </p>
           </div>
-          <Link to="/products" className="btn btn-secondary btn-lg" style={{ backgroundColor: '#ffffff', color: 'var(--primary)', fontWeight: 700 }}>
+          <Link to="/products" className="btn btn-secondary btn-lg" style={{ backgroundColor: '#F9F8F6', color: '#111111', fontWeight: 600 }}>
             <Zap size={20} /> Shop All Deals
           </Link>
         </div>
