@@ -18,7 +18,7 @@
 - **Backend-Calculated Order Checkout**: Order totals (subtotal, ₹50 flat delivery fee, grand total) are calculated on the backend from database values to prevent price tampering.
 - **Atomic Stock Deduction**: Order placement automatically updates inventory stock in the SQLite database within a database transaction.
 - **Order History**: Authenticated users can view their past orders with order status ("Placed"), timestamps, item breakdown, and delivery addresses.
-- **Modern Responsive Design**: Built with custom Vanilla CSS variables, glassmorphism card UI, responsive navigation drawer, loading skeletons, and interactive micro-animations.
+- **Modern Responsive Design**: Built with custom Vanilla CSS variables, glassmorphic card UI, responsive navigation drawer, loading skeletons, and interactive micro-animations.
 
 ---
 
@@ -43,10 +43,11 @@
 
 ```
 ShopEase/
+├── render.yaml                # Render Blueprint infrastructure configuration
 ├── backend/
 │   ├── database/
 │   │   ├── db.js              # SQLite connection, schema creation & seeding
-│   │   └── shopease.db        # SQLite persistent database file
+│   │   └── shopease.db        # SQLite database file
 │   ├── middleware/
 │   │   └── auth.js            # JWT Authentication middleware
 │   ├── controllers/
@@ -57,12 +58,14 @@ ShopEase/
 │   │   ├── authRoutes.js      # Auth API endpoints
 │   │   ├── productRoutes.js   # Product API endpoints
 │   │   └── orderRoutes.js     # Protected Order API endpoints
-│   ├── .env                   # Environment variables
-│   ├── .env.example           # Example environment template
-│   ├── package.json           # Backend dependencies
-│   └── server.js              # Express server startup
+│   ├── .env                   # Environment variables (ignored by git)
+│   ├── .env.example           # Example backend environment template
+│   ├── package.json           # Backend dependencies & start script
+│   └── server.js              # Express server entry point
 │
 ├── frontend/
+│   ├── public/
+│   │   └── _redirects         # SPA routing rewrite rule for Render
 │   ├── src/
 │   │   ├── components/        # Navbar, Footer, ProductCard, ProtectedRoute
 │   │   ├── context/           # AuthContext & CartContext
@@ -71,9 +74,10 @@ ShopEase/
 │   │   ├── App.jsx            # Main App container & Route definitions
 │   │   ├── index.css          # Design system stylesheet
 │   │   └── main.jsx           # React DOM root entry
+│   ├── .env.example           # Example frontend environment template
 │   ├── index.html             # HTML5 template
 │   ├── vite.config.js         # Vite configuration & proxy settings
-│   └── package.json           # Frontend dependencies
+│   └── package.json           # Frontend dependencies & build script
 │
 ├── README.md                  # Project documentation
 └── .gitignore                 # Git ignore rules
@@ -141,9 +145,46 @@ ShopEase uses SQLite with foreign-key integrity:
 | `GET` | `/api/orders` | Get user order history | Yes (Bearer Token) |
 | `GET` | `/api/orders/:id` | Get single order details | Yes (Bearer Token) |
 
+### Health Check API
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/health` | Server health check status | No |
+| `GET` | `/api/health` | API health check status | No |
+
 ---
 
-## ⚙️ Installation & Setup Instructions
+## 🌐 Deployment (Render)
+
+ShopEase is prepared for deployment on **Render** using a dual-service architecture (Static Site for Frontend + Web Service for Backend) or via Render's Blueprint (`render.yaml`).
+
+### Service 1: ShopEase Backend (Web Service)
+- **Root Directory**: `backend`
+- **Environment / Runtime**: `Node`
+- **Build Command**: `npm install`
+- **Start Command**: `npm start`
+- **Environment Variables**:
+  - `PORT`: Automatically assigned by Render (default `10000` or `5000`)
+  - `JWT_SECRET`: Secret key for signing JWT auth tokens
+  - `FRONTEND_URL`: URL of your deployed frontend (e.g. `https://shopease-frontend.onrender.com`)
+  - `NODE_ENV`: `production`
+
+### Service 2: ShopEase Frontend (Static Site)
+- **Root Directory**: `frontend`
+- **Environment / Runtime**: `Static Site`
+- **Build Command**: `npm install && npm run build`
+- **Publish Directory**: `dist`
+- **Environment Variables**:
+  - `VITE_API_URL`: URL of your deployed backend (e.g. `https://shopease-backend.onrender.com`)
+- **SPA Rewrite Rule**:
+  - `_redirects` file is included in `frontend/public/_redirects` (`/* /index.html 200`) so direct navigation to React Router paths (`/cart`, `/orders`, `/login`, etc.) works without 404 errors on refresh.
+
+### 💾 SQLite Ephemeral Storage Notice
+> [!NOTE]
+> Render's default free-tier Web Services run on an **ephemeral filesystem**. This means the SQLite database (`shopease.db`) will automatically initialize and seed 14 realistic demo products on startup. Any new users registered or orders placed while the server is active will persist in memory/disk until the service restarts or redeploys, at which point it resets to the seeded dataset. For permanent data persistence on Render, a paid **Render Disk** mount or PostgreSQL database can be attached.
+
+---
+
+## ⚙️ Local Installation & Setup
 
 ### Prerequisites
 - **Node.js**: v18.0.0 or higher
@@ -151,7 +192,7 @@ ShopEase uses SQLite with foreign-key integrity:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/ShopEase.git
+git clone https://github.com/CodeAlpha-ShopEase/ShopEase.git
 cd ShopEase
 ```
 
@@ -180,15 +221,7 @@ To test out-of-the-box:
 - **Email**: `intern@shopease.com`
 - **Password**: `password123`
 
-*(Or simply register a new account on the `/register` page).*
-
----
-
-## 🔮 Future Improvements
-- Integration of a live payment gateway (Razorpay / Stripe).
-- Admin Panel for product management and order status updates.
-- User profile editing and address book persistence.
-- Product reviews and rating system.
+*(Or register a new account on the `/register` page).*
 
 ---
 
