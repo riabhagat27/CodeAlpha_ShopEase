@@ -1,7 +1,6 @@
-const rawApiUrl = import.meta.env.VITE_API_URL || '';
-const API_BASE_URL = rawApiUrl
-  ? (rawApiUrl.endsWith('/api') ? rawApiUrl : `${rawApiUrl.replace(/\/$/, '')}/api`)
-  : '/api';
+const rawApiUrl = (import.meta.env.VITE_API_URL || '').trim().replace(/\/$/, '');
+const originBase = rawApiUrl.endsWith('/api') ? rawApiUrl.slice(0, -4) : rawApiUrl;
+const API_BASE_URL = originBase ? `${originBase}/api` : '/api';
 
 async function fetchAPI(endpoint, options = {}) {
   const token = localStorage.getItem('shopease_token');
@@ -11,19 +10,33 @@ async function fetchAPI(endpoint, options = {}) {
     ...options.headers,
   };
 
-  if (token) {
+  if (token && token !== 'undefined' && token !== 'null') {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
 
-  const data = await response.json().catch(() => ({}));
+  let response;
+  try {
+    response = await fetch(`${API_BASE_URL}${cleanEndpoint}`, {
+      ...options,
+      headers,
+    });
+  } catch (netErr) {
+    console.error('Network Error during API fetch:', netErr);
+    throw new Error('Unable to connect to backend server. Please verify network and backend API URL.');
+  }
+
+  let data = {};
+  const contentType = response.headers.get('content-type') || '';
+  if (contentType.includes('application/json')) {
+    data = await response.json().catch(() => ({}));
+  } else if (!response.ok) {
+    throw new Error(`Server returned response status ${response.status}. Please check backend API deployment URL.`);
+  }
 
   if (!response.ok) {
-    const error = new Error(data.message || 'Something went wrong. Please try again.');
+    const error = new Error(data.message || `Request failed with status ${response.status}.`);
     error.status = response.status;
     error.data = data;
     throw error;

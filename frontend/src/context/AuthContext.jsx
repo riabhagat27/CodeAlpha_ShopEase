@@ -10,7 +10,8 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const initAuth = async () => {
-      if (token) {
+      const storedToken = localStorage.getItem('shopease_token');
+      if (storedToken && storedToken !== 'undefined' && storedToken !== 'null') {
         try {
           const res = await api.getMe();
           setUser(res.user);
@@ -18,6 +19,8 @@ export const AuthProvider = ({ children }) => {
           console.warn('Token validation failed:', err.message);
           logout();
         }
+      } else if (user || token) {
+        logout();
       }
       setLoading(false);
     };
@@ -27,17 +30,21 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const res = await api.login({ email, password });
-    localStorage.setItem('shopease_token', res.token);
-    setToken(res.token);
-    setUser(res.user);
+    if (res && res.token) {
+      localStorage.setItem('shopease_token', res.token);
+      setToken(res.token);
+      setUser(res.user);
+    }
     return res;
   };
 
   const register = async (name, email, password) => {
     const res = await api.register({ name, email, password });
-    localStorage.setItem('shopease_token', res.token);
-    setToken(res.token);
-    setUser(res.user);
+    if (res && res.token) {
+      localStorage.setItem('shopease_token', res.token);
+      setToken(res.token);
+      setUser(res.user);
+    }
     return res;
   };
 
