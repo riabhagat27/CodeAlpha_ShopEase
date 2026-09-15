@@ -31,8 +31,16 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Health check endpoints
-app.get(['/health', '/api/health'], (req, res) => {
-  res.json({ status: 'ok', message: 'ShopEase Backend Server is running.' });
+app.get('/', (req, res) => {
+  res.status(200).json({ status: 'OK', message: 'ShopEase API Server is running.' });
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
+
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'OK', message: 'ShopEase API Server is running.' });
 });
 
 // API Routes
