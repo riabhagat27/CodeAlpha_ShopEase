@@ -9,6 +9,12 @@
 
 ---
 
+## 🚀 Live Demo
+
+🌐 **Live Website**: [https://shopease-frontend-g68j.onrender.com](https://shopease-frontend-g68j.onrender.com)
+
+---
+
 ## 🚀 Key Features
 
 - **Product Catalog & Details**: Browse products across multiple categories (Electronics, Fashion, Home, Accessories) with real-time stock status, pricing in Indian Rupees (₹), and detailed product pages.
